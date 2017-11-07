@@ -1,0 +1,29 @@
+{
+  "name": "throwback",
+  "version": "0.0.0",
+  "description": "game off 2017",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack && webpack-dev-server --port=3030"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brekk/throwback.git"
+  },
+  "authors": [
+    "brekk"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brekk/throwback/issues"
+  },
+  "homepage": "https://github.com/brekk/throwback#readme",
+  "dependencies": {
+    "phaser": "^3.0.0-beta.5"
+  },
+  "devDependencies": {
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.9.4"
+  }
+}

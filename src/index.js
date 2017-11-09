@@ -11,10 +11,10 @@ var config = {
       update: update
     },
     physics: {
-      default: 'impact', 
+      default: 'impact', // arcade seems simpler but isn't in V3 yet
       impact: {
         gravity: 0,
-        debug: true,
+        debug: true, // Shows bounding box and acceleration vector
         maxVelocity: 500
       }
     }
@@ -41,16 +41,20 @@ function create () {
   right = keys.right
   
   playerImage = this.add.image(game.canvas.width / 2, game.canvas.height * .25, 'spaceship');
+   
+  // Add boundaries at the screen edge
   this.physics.world.setBounds()
+
   playerPhysics = this.physics.add
     .body(game.canvas.width / 2, game.canvas.height *.75)
     .setActive()
     .setVelocity(0, 0)
-    .setBounce(.4)
+    .setBounce(.4) // This is the rebound when player hits the edge of screen
+
   playerPhysics.setGameObject(playerImage, false)
   const friction = 200
   playerPhysics.setFriction(friction, friction)
-  playerPhysics.setBodySize(107, 95)
+  playerPhysics.setBodySize(107, 95) // Physics bounding box
   playerPhysics.setBodyScale(.8)
 }
 
@@ -58,9 +62,11 @@ function update () {
   //  Reset the players velocity (movement)
   const factor = 200
   
+  // We also tried playerPhysics.setVelocity(0, 0) here instead of friction
+
   if (left.isDown)
   {
-    playerPhysics.setVelocityX(-factor)
+    playerPhysics.setVelocityX(-factor) // See also .setAcceleration
   }
   else if (right.isDown)
   {

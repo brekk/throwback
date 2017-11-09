@@ -72,6 +72,8 @@ function update () {
   {
     playerPhysics.setVelocityX(factor)
   }
+
+  // Not else if here so they can move left & up at the same time, etc.
   if (up.isDown)
   {
     playerPhysics.setVelocityY(-factor)

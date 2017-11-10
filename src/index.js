@@ -1,5 +1,6 @@
 import 'phaser'
 import {throttle} from './util'
+import {map} from 'ramda'
 
 var GAME_CONFIG = {
     type: Phaser.AUTO,
@@ -101,6 +102,8 @@ function create () {
   WORLD.playerPhysics = playerPhysics
 }
 
+const randomize = map((x) => Math.random() * x * 1)
+
 function update () {
   //  Reset the players velocity (movement)
   const {acceleration, colors} = CONFIG
@@ -144,7 +147,18 @@ function update () {
       a: bullets[i].a
     }
     if (FLAGS.wiggleShot) {
+       if (movedBullet.a > 5) {
+         movedBullet.a += 1
+       }
        movedBullet.x += WORLD.wiggleShot.sine
+       if ((1e3 * Math.random()) < 1) {
+         movedBullet.a += 10
+       }
+       if ((5e3 * Math.random()) < 1) {
+         // this is silly right now but I'm imagining that these wobble bullets could eventually
+         // become lightning, and these larger bullets would be how it spreads
+         WORLD.bullets.push(randomize(movedBullet))
+       }
       //  movedBullet.a = 1000 / (GAME_CONFIG.height - movedBullet.y)
     }
     WORLD.bullets[i] = movedBullet

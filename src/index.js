@@ -2,9 +2,7 @@ import Phaser from 'phaser'
 
 import {GAME_CONFIG} from './config'
 
-import {create} from './create'
-import {update} from './update'
-import {preload} from './preload'
+import {create, update, preload} from './scene'
 
 GAME_CONFIG.scene = {
   preload,

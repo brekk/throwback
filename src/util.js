@@ -1,4 +1,5 @@
-import {map} from 'ramda'
+import {curry, map} from 'ramda'
+import {GAME_CONFIG} from './config'
 
 export const makeTick = () => {
   let time = 0
@@ -13,4 +14,16 @@ export const makeTick = () => {
   }
 }
 
-export const randomize = map((x) => Math.random() * x * 1)
+export const randomize = curry(
+  (amount, input) => map(
+    (x) => (Math.random() * x * amount),
+    input
+  )
+)
+
+export const ephemeraOutsideBounds = (b) => (
+  b.y <= GAME_CONFIG.height ||
+  b.y > 0 ||
+  b.x > GAME_CONFIG.width ||
+  b.x <= 0
+)

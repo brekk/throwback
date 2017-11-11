@@ -1,22 +1,16 @@
-export function throttle(fn, threshhold, scope) {
-  threshhold || (threshhold = 250);
-  var last,
-      deferTimer;
-  return function () {
-    var context = scope || this;
+import {map} from 'ramda'
 
-    var now = +new Date,
-        args = arguments;
-    if (last && now < last + threshhold) {
-      // hold on to it
-      clearTimeout(deferTimer);
-      deferTimer = setTimeout(function () {
-        last = now;
-        fn.apply(context, args);
-      }, threshhold);
-    } else {
-      last = now;
-      fn.apply(context, args);
+export const makeTick = () => {
+  let time = 0
+  return {
+    resetTick: () => {
+      time = 0
+    },
+    tick: () => {
+      time += 1
+      return time
     }
-  };
+  }
 }
+
+export const randomize = map((x) => Math.random() * x * 1)

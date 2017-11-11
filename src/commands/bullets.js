@@ -1,0 +1,15 @@
+import throttle from 'lodash/fp/throttle'
+import {CONFIG} from '../config'
+import {WORLD} from '../world'
+
+const {bulletFireRate} = CONFIG // bullets per this as milli
+export const fireBullet = throttle(bulletFireRate, () => {
+  const {playerPhysics} = WORLD
+  const newBullet = {
+    x: playerPhysics.body.pos.x + playerPhysics.body.size.x / 2,
+    y: playerPhysics.body.pos.y - 15,
+    a: 5
+  }
+  WORLD.bullets.push(newBullet)
+  WORLD.graphics.fillCircle(newBullet.x, newBullet.y, newBullet.a)
+})

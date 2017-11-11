@@ -1,8 +1,8 @@
-import {GAME_CONFIG, CONFIG} from './config'
-import {WORLD} from './world'
-import {FEATURES as FLAGS} from './features'
-import {randomize} from './util'
-import {fireBullet} from './commands/bullets'
+import {GAME_CONFIG, CONFIG} from '../config'
+import {WORLD} from '../world'
+import {FEATURES as FLAGS} from '../features'
+import {randomize} from '../util'
+import {fireBullet} from '../commands/bullets'
 
 export function update() {
   //  Reset the players velocity (movement)

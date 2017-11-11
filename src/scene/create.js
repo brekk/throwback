@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import {WORLD} from './world'
-import {GAME_CONFIG, CONFIG} from './config'
-import {FEATURES as FLAGS} from './features'
-import {makeTick} from './util'
+import {WORLD} from '../world'
+import {GAME_CONFIG, CONFIG} from '../config'
+import {FEATURES as FLAGS} from '../features'
+import {makeTick} from '../util'
 
 export function create() {
   const keys = this.input.keyboard.addKeys({

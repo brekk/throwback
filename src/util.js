@@ -1,5 +1,8 @@
 import {curry, map} from 'ramda'
+import throttle from 'lodash/fp/throttle'
 import {GAME_CONFIG} from './config'
+
+export const throtLog = throttle(300, console.log)
 
 export const makeTick = () => {
   let time = 0
@@ -21,12 +24,17 @@ export const randomize = curry(
   )
 )
 
-export const ephemeraOutsideBounds = (b) => (
-  b.y <= GAME_CONFIG.height ||
-  b.y > 0 ||
-  b.x > GAME_CONFIG.width ||
-  b.x <= 0
-)
+export const ephemeraOutsideBounds = (b) => {
+  return (
+    b && b.x && b.y &&
+    (
+      b.y <= GAME_CONFIG.height ||
+      b.y > 0 ||
+      b.x > GAME_CONFIG.width ||
+      b.x <= 0
+    )
+  )
+}
 
 // the idea is that you can basically have simpler conditional functions
 // which only take effect when a certain condition is true

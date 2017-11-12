@@ -1,9 +1,12 @@
+import Phaser from 'phaser'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
-import {ephemeraOutsideBounds} from '../util'
+import {ephemeraOutsideBounds, throtLog} from '../util'
 import {fireBullet} from '../ephemera/bullets'
 import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre} from '../features'
+const {Geom} = Phaser
+const {Circle} = Geom
 
 export function update() {
   WORLD.graphics.clear()
@@ -11,7 +14,7 @@ export function update() {
   const {yellow, white} = colors
   const {inputs, ephemera} = WORLD
   const {bullets, powerups} = ephemera
-  const {left, right, up, down, space, alt} = inputs
+  const {left, right, up, down, space} = inputs
 
   // We also tried player.physics.setVelocity(0, 0) here instead of friction
 
@@ -45,7 +48,7 @@ export function update() {
     let powerup = powerups[x]
     WORLD.graphics.lineStyle(2, 0xffff00, 2)
     WORLD.graphics.fillStyle(0xff0000, 1)
-    WORLD.graphics.fillCircle(powerup.entity.x, powerup.entity.y, powerup.entity.a)
+    WORLD.graphics.fillCircle(powerup.x, powerup.y, powerup._radius)
   }
 
   // TODO: scale on acceleration instead so we can tweak this globally
@@ -53,23 +56,34 @@ export function update() {
   for (let i = 0; i < bullets.length; i++) {
     updateEphemeraPre(i)
 
-    const movedBullet = updateEphemeraPost({
-      x: bullets[i].x,
-      y: bullets[i].y - bulletConfig.speed,
-      a: bullets[i].a
-    })
-
+    const movedBullet = updateEphemeraPost(new Circle(
+      bullets[i].x,
+      bullets[i].y - bulletConfig.speed,
+      bullets[i]._radius
+    ))
+    const outOfBounds = ephemeraOutsideBounds(movedBullet)
     WORLD.ephemera.bullets[i] = movedBullet
     WORLD.graphics.lineStyle(2, yellow, 2)
     WORLD.graphics.fillStyle(WORLD.wiggleShot ? white : yellow, 1)
-    WORLD.graphics.fillCircle(movedBullet.x, movedBullet.y, movedBullet.a)
+    WORLD.graphics.fillCircle(movedBullet.x, movedBullet.y, movedBullet._radius)
+
+    // if (powerups.filter((x) => {
+    //   const intersects = Phaser.Geom.Intersects.CircleToCircle(x, movedBullet)
+    //   console.log(`x`, intersects)
+    //   return intersects
+    // }).length > 0) {
+    //   console.log(`Intersection occurred`)
+    // }
   }
 
-  WORLD.ephemera.bullets = WORLD.ephemera.bullets.filter(
+  const filtered = WORLD.ephemera.bullets.filter(
     ephemeraOutsideBounds
   )
+  throtLog(`%c$$$$`, `background-color: red;`, filtered.length, `vs`, WORLD.ephemera.bullets.length)
+  // WORLD.ephemera.bullets = filtered
 
   if (space.isDown) {
     fireBullet()
   }
+  throtLog(`bullets`, bullets.length, powerups.length)
 }

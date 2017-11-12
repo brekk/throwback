@@ -1,6 +1,10 @@
+import Phaser from 'phaser'
 import {curry} from 'ramda'
 import {CONFIG, GAME_CONFIG} from '../config'
 import {WORLD} from '../world'
+
+const {Geom} = Phaser
+const {Circle} = Geom
 
 const {powerups} = CONFIG
 /*
@@ -44,15 +48,13 @@ export const addPowerUp = curry((which, creator) => () => {
 })
 
 export const addPlusOne = addPowerUp(`plusOne`, (base) => {
-  const plusOne = {
-    x: Math.round(Math.random() * GAME_CONFIG.width),
-    y: Math.round(Math.random() * GAME_CONFIG.height),
-    a: 15
-  }
+  const plusOne = new Circle(
+    Math.round(Math.random() * GAME_CONFIG.width),
+    Math.round(Math.random() * (GAME_CONFIG.height * 0.75)),
+    15
+  )
   return Object.assign({},
     base,
-    {
-      entity: plusOne
-    }
+    plusOne
   )
 })

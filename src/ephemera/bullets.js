@@ -14,6 +14,6 @@ export const fireBullet = throttle(fireRate, () => {
     y: body.pos.y - 15,
     a: 5
   })
-  WORLD.ephemeraBullets.push(b)
+  WORLD.ephemera.bullets.push(b)
   WORLD.graphics.fillCircle(b.x, b.y, b.a)
 })

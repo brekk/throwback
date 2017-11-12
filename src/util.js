@@ -25,15 +25,12 @@ export const randomize = curry(
   )
 )
 
-export const ephemeraOutsideBounds = (b) => {
+export const ephemeraInBounds = (b) => {
   return (
-    b && b.x && b.y &&
-    (
-      b.y <= GAME_CONFIG.height ||
-      b.y > 0 ||
-      b.x > GAME_CONFIG.width ||
-      b.x <= 0
-    )
+    b.y < GAME_CONFIG.height &&
+    b.y > 0 &&
+    b.x < GAME_CONFIG.width &&
+    b.x > 0
   )
 }
 

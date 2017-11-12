@@ -24,7 +24,7 @@ export const updateEphemeraPost = (ephemera) => {
   if ((5e3 * Math.random()) < 1) {
     // this is silly right now but I'm imagining that these wobble bullets could eventually
     // become lightning, and these larger bullets would be how it spreads
-    WORLD.ephemeraBullets.push(randomize(ephemera))
+    WORLD.ephemera.bullets.push(randomize(ephemera))
   }
   return ephemera
 }

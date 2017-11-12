@@ -12,6 +12,8 @@ export const FEATURE = {
     wiggle: weaponWiggle
   }
 }
-export const create = conditionWrap(weaponWiggle, inner)
-export const updateEphemeraPre = conditionWrap(weaponWiggle, preUpdate)
-export const updateEphemeraPost = conditionWrap(weaponWiggle, postUpdate)
+
+const whenWeaponsShouldWiggleDo = conditionWrap(weaponWiggle)
+export const create = whenWeaponsShouldWiggleDo(inner)
+export const updateEphemeraPre = whenWeaponsShouldWiggleDo(preUpdate)
+export const updateEphemeraPost = whenWeaponsShouldWiggleDo(postUpdate)

@@ -20,11 +20,11 @@ export const addPowerUp = curry((which, creator) => () => {
     // const {entity} = creator(base)
     if (!entity) {
       entity = creator(base)
-      WORLD.ephemera.powerups.push(entity.graphic)
+      WORLD.ephemera.powerups.push(entity)
     }
     WORLD.graphics.lineStyle(2, 0xffff00, 2)
     WORLD.graphics.fillStyle(0xff0000, 1)
-    WORLD.graphics.fillCircle(entity.graphic.x, entity.graphic.y, entity.graphic._radius)
+    WORLD.graphics.fillCircle(entity.x, entity.y, entity._radius)
     // console.log(WORLD.graphics, `world gfx`)
   }
   return Object.assign(
@@ -48,14 +48,10 @@ export const addPowerUp = curry((which, creator) => () => {
   )
 })
 
-export const addPlusOne = addPowerUp(`plusOne`, (base) => {
-  const plusOne = Circle.of({
+export const addPlusOne = addPowerUp(`plusOne`, () => {
+  return Circle.of({
     x: Math.round(Math.random() * GAME_CONFIG.width),
     y: Math.round(Math.random() * (GAME_CONFIG.height * 0.75)),
     a: 15
   })
-  return {
-    base,
-    graphic: plusOne
-  }
 })

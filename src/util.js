@@ -44,8 +44,10 @@ export const Circle = {
 // which only take effect when a certain condition is true
 // in this case, this was originally designed to pull feature flags into a condition
 // and then render only when / if the feature flag is on
-export const conditionWrap = curry((condition, inner) => (x) => (
-  condition ?
-    inner(x) :
-    x
-))
+export const conditionWrap = curry(function wrap(condition, inner) {
+  return (x) => (
+    condition ?
+      inner(x) :
+      x
+  )
+})

@@ -1,4 +1,10 @@
 import {pipe} from 'ramda'
+// import {WORLD} from '../world'
+import {
+  FEATURE as SHOW_STATS,
+  create as createStats,
+  updatePre as updateStatsPre
+} from './show-stats'
 import {
   FEATURE as WEAPON,
   create as createWeapon,
@@ -8,11 +14,17 @@ import {
 
 export const FEATURES = Object.assign(
   {},
-  WEAPON
+  WEAPON,
+  SHOW_STATS
 )
 
 export const create = () => {
+  console.log(`running create hook!`)
   createWeapon()
+  createStats()
+}
+export function updatePre(context) {
+  updateStatsPre(context)
 }
 
 export const updateEphemeraPre = pipe(

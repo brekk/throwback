@@ -1,5 +1,6 @@
 const FLAGS = {
-  weaponWiggle: false
+  weaponWiggle: true,
+  showStats: true
 }
 
 module.exports = {FLAGS}

@@ -18,6 +18,8 @@ const environment = pipe(
   })
 )(FLAGS)
 
+console.log(JSON.stringify(environment, null, 4))
+
 module.exports = {
 
   entry: `./src/index.js`,

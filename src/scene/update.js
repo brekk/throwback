@@ -4,7 +4,7 @@ import {WORLD} from '../world'
 import {Circle, ephemeraInBounds, throtLog} from '../util'
 import {fireBullet} from '../ephemera/bullets'
 import {addPlusOne} from '../ephemera/powerups'
-import {updateEphemeraPost, updateEphemeraPre} from '../features'
+import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
 // const {Geom} = Phaser
 // const {Circle} = Geom
 
@@ -31,10 +31,12 @@ export function update() {
   } else if (down.isDown) {
     WORLD.player.physics.setVelocityY(acceleration)
   }
-  let addOne
+
+  // updatePre(this)
+
   if (!WORLD.powerupIntervalForPlusOne && WORLD.ephemera.powerups.length === 0) {
   // if (alt.isDown) {
-    addOne = addPlusOne()
+    const addOne = addPlusOne()
     console.log(`no powerup interval`, addOne)
     WORLD.powerupIntervalForPlusOne = addOne
     addOne.start()
@@ -82,4 +84,5 @@ export function update() {
   if (space.isDown) {
     fireBullet()
   }
+  // updatePost(WORLD)
 }

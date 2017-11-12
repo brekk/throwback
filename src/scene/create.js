@@ -1,9 +1,8 @@
 import Phaser from 'phaser'
 import {WORLD} from '../world'
 import {GAME_CONFIG, CONFIG} from '../config'
-import {FEATURES} from '../../features'
+import {create as createFeatures} from '../features'
 import {SPRITES} from '../sprites'
-import {makeTick} from '../util'
 
 export function create() {
   WORLD.inputs = this.input.keyboard.addKeys({
@@ -36,7 +35,5 @@ export function create() {
   playerPhysics.setBodyScale(0.8)
   WORLD.player.physics = playerPhysics
 
-  if (FEATURES.wiggleShot) {
-    WORLD.wiggleShot = makeTick()
-  }
+  createFeatures()
 }

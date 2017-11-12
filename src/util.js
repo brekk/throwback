@@ -27,3 +27,13 @@ export const ephemeraOutsideBounds = (b) => (
   b.x > GAME_CONFIG.width ||
   b.x <= 0
 )
+
+export const conditionWrap = curry((condition, inner) => {
+  return (x) => {
+    if (condition) {
+      return inner(x)
+    } else {
+      return x
+    }
+  }
+})

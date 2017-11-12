@@ -1,13 +1,23 @@
 'use strict'
 
-const {FEATURES} = require(`./features`)
+const {FLAGS} = require(`./flags`)
 const webpack = require(`webpack`)
 const HtmlWebpackPlugin = require(`html-webpack-plugin`)
 const path = require(`path`)
-const {map} = require(`ramda`)
+const {curry, toPairs, map, reduce, pipe} = require(`ramda`)
 
-const JFEATURES = map(JSON.stringify, FEATURES)
-console.log(`JFEARTURES`, JFEATURES)
+const merge = curry((a, b) => Object.assign({}, a, b))
+
+const environment = pipe(
+  toPairs,
+  map(([k, v]) => ({[`process.env.${k}`]: JSON.stringify(v)})),
+  reduce(merge, {}),
+  merge({
+    'CANVAS_RENDERER': JSON.stringify(true),
+    'WEBGL_RENDERER': JSON.stringify(true)
+  })
+)(FLAGS)
+
 module.exports = {
 
   entry: `./src/index.js`,
@@ -18,11 +28,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.DefinePlugin({
-      ...JFEATURES,
-      'CANVAS_RENDERER': JSON.stringify(true),
-      'WEBGL_RENDERER': JSON.stringify(true)
-    }),
+    new webpack.DefinePlugin(environment),
     new HtmlWebpackPlugin({
       template: `index.html`
     })

@@ -1,8 +1,8 @@
-import Phaser from 'phaser'
+// import Phaser from 'phaser'
 import {WORLD} from '../../world'
 import {randomize} from '../../util'
-const {Geom} = Phaser
-const {Circle} = Geom
+// const {Geom} = Phaser
+// const {Circle} = Geom
 
 export const updateEphemeraPre = (i) => {
   WORLD.wiggleShot.lastTick = WORLD.wiggleShot.tick() + i
@@ -24,7 +24,7 @@ export const updateEphemeraPost = (ephemera) => {
   if ((5e3 * Math.random()) < 1) {
     // this is silly right now but I'm imagining that these wobble bullets could eventually
     // become lightning, and these larger bullets would be how it spreads
-    WORLD.ephemera.bullets.push(randomize(new Circle(ephemera.x, ephemera.y, ephemera._radius)))
+    WORLD.ephemeraBullets.push(randomize(ephemera))
   }
   return ephemera
 }

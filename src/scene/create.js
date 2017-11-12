@@ -23,7 +23,7 @@ export function create() {
     SPRITES.PLAYER
   )
   WORLD.graphics = this.add.graphics()
-  WORLD.ephemera.bullets = []
+  WORLD.ephemeraBullets = []
   WORLD.ephemera.powerups = []
   // Add boundaries at the screen edge
   this.physics.world.setBounds()

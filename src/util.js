@@ -1,4 +1,5 @@
 import {curry, map} from 'ramda'
+import Phaser from 'phaser'
 import throttle from 'lodash/fp/throttle'
 import {GAME_CONFIG} from './config'
 
@@ -34,6 +35,12 @@ export const ephemeraOutsideBounds = (b) => {
       b.x <= 0
     )
   )
+}
+
+const {Geom} = Phaser
+const {Circle: PCircle} = Geom
+export const Circle = {
+  of: ({x, y, a}) => new PCircle(x, y, a)
 }
 
 // the idea is that you can basically have simpler conditional functions

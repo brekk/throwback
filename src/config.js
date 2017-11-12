@@ -3,8 +3,18 @@ import Phaser from 'phaser'
 export const CONFIG = Object.freeze({
   friction: 200,
   acceleration: 200,
-  bulletSpeed: 7,
-  bulletFireRate: 150,
+  powerups: {
+    plusOne: {
+      sprite: `+1`,
+      interval: 100,
+      lifetime: 400
+    }
+  },
+  bullets: {
+    // speed: 7,
+    speed: 10,
+    fireRate: 150
+  },
   colors: {
     yellow: 0xffff00,
     white: 0xffffff

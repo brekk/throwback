@@ -2,8 +2,9 @@ import throttle from 'lodash/fp/throttle'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
 
-const {bulletFireRate} = CONFIG // bullets per this as milli
-export const fireBullet = throttle(bulletFireRate, () => {
+const {bullets} = CONFIG
+const {fireRate} = bullets // bullets per this as milli
+export const fireBullet = throttle(fireRate, () => {
   const {player} = WORLD
   const {physics} = player
   const {body} = physics

@@ -28,12 +28,12 @@ export const ephemeraOutsideBounds = (b) => (
   b.x <= 0
 )
 
-export const conditionWrap = curry((condition, inner) => {
-  return (x) => {
-    if (condition) {
-      return inner(x)
-    } else {
-      return x
-    }
-  }
-})
+// the idea is that you can basically have simpler conditional functions
+// which only take effect when a certain condition is true
+// in this case, this was originally designed to pull feature flags into a condition
+// and then render only when / if the feature flag is on
+export const conditionWrap = curry((condition, inner) => (x) => (
+  condition ?
+    inner(x) :
+    x
+))

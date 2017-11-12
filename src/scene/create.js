@@ -4,14 +4,19 @@ import {GAME_CONFIG, CONFIG} from '../config'
 import {create as createFeatures} from '../features'
 import {SPRITES} from '../sprites'
 
+const KEYS = Phaser.Input.Keyboard.KeyCodes
+console.log(Object.keys(KEYS))
+
 export function create() {
   WORLD.inputs = this.input.keyboard.addKeys({
-    up: Phaser.Input.Keyboard.KeyCodes.UP,
-    down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-    left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-    right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-    space: Phaser.Input.Keyboard.KeyCodes.SPACE
+    up: KEYS.UP,
+    down: KEYS.DOWN,
+    left: KEYS.LEFT,
+    right: KEYS.RIGHT,
+    alt: KEYS.SHIFT,
+    space: KEYS.SPACE
   })
+  console.log(WORLD.inputs.right)
   WORLD.player.image = this.add.image(
     GAME_CONFIG.width / 2,
     GAME_CONFIG.height * 0.25,
@@ -19,6 +24,7 @@ export function create() {
   )
   WORLD.graphics = this.add.graphics()
   WORLD.ephemera.bullets = []
+  WORLD.ephemera.powerups = []
   // Add boundaries at the screen edge
   this.physics.world.setBounds()
 
@@ -35,5 +41,6 @@ export function create() {
   playerPhysics.setBodyScale(0.8)
   WORLD.player.physics = playerPhysics
 
+  // an assemblage of all the features we might want to initialize
   createFeatures()
 }

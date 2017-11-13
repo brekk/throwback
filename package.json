@@ -4,8 +4,8 @@
   "description": "game off 2017",
   "main": "src/index.js",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack && webpack-dev-server --port=3030"
+    "build": "nps build",
+    "start": "nps start"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "nps": "^5.7.1",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.9.4"
   }

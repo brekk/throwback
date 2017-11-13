@@ -14,9 +14,9 @@ const {powerups} = CONFIG
 export const addPowerUp = curry((which, creator) => () => {
   let id
   const base = powerups[which]
-  console.log(`generating powerup maker for ${base.sprite}`)
+  // console.log(`generating powerup maker for ${base.sprite}`)
   const render = (entity) => {
-    console.log(`adding powerup ${base.sprite}`)
+    // console.log(`adding powerup ${base.sprite}`)
     // const {entity} = creator(base)
     if (!entity) {
       entity = creator(base)

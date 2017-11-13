@@ -19,7 +19,7 @@ export const FEATURES = Object.assign(
 )
 
 export const create = () => {
-  console.log(`running create hook!`)
+  // console.log(`running create hook!`)
   createWeapon()
   createStats()
 }

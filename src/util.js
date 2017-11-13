@@ -25,19 +25,18 @@ export const randomize = curry(
   )
 )
 
-export const ephemeraInBounds = (b) => {
-  return (
-    b.y < GAME_CONFIG.height &&
-    b.y > 0 &&
-    b.x < GAME_CONFIG.width &&
-    b.x > 0
-  )
-}
+export const ephemeraInBounds = (b) => (
+  b.y < GAME_CONFIG.height &&
+  b.y > 0 &&
+  b.x < GAME_CONFIG.width &&
+  b.x > 0
+)
 
 const {Geom} = Phaser
 const {Circle: PCircle} = Geom
+// abstract over the original code we wrote and using proper PhaserCircles
 export const Circle = {
-  of: ({x, y, a}) => new PCircle(x, y, a)
+  of: ({x, y, a, _radius}) => new PCircle(x, y, _radius || a)
 }
 
 // the idea is that you can basically have simpler conditional functions

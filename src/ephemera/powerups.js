@@ -2,7 +2,10 @@
 import {curry} from 'ramda'
 import {CONFIG, GAME_CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Circle, throtLog} from '../util'
+import {
+  Circle
+  // throtLog
+} from '../util'
 
 // const {Geom} = Phaser
 // const {Circle} = Geom

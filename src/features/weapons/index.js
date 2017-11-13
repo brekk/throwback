@@ -13,6 +13,7 @@ export const FEATURE = {
   }
 }
 
+// this makes our functions feature-flag specific
 const whenWeaponsShouldWiggleDo = conditionWrap(weaponWiggle)
 export const create = whenWeaponsShouldWiggleDo(inner)
 export const updateEphemeraPre = whenWeaponsShouldWiggleDo(preUpdate)

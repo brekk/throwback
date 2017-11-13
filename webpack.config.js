@@ -36,7 +36,7 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 3030
+    port: FLAGS.port || 3030
   },
 
   devtool: `inline-source-map`

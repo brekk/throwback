@@ -8,6 +8,8 @@ const showStats = process.env.showStats
 export const FEATURE = {
   showStats: showStats
 }
+
+// this makes our functions feature-flag specific
 const whenShowStatsDo = conditionWrap(showStats)
 export const create = whenShowStatsDo(inner)
 export const updatePre = whenShowStatsDo(updateStatsPre)

@@ -32,16 +32,15 @@ export function update() {
     WORLD.player.physics.setVelocityY(acceleration)
   }
 
-  // updatePre(this)
+  // updatePre(this.add.text.bind(this))
+  // console.log(`this`, this)
 
   if (!WORLD.powerupIntervalForPlusOne && WORLD.ephemera.powerups.length === 0) {
   // if (alt.isDown) {
     const addOne = addPlusOne()
-    console.log(`no powerup interval`, addOne)
     WORLD.powerupIntervalForPlusOne = addOne
     addOne.start()
     setTimeout(() => {
-      console.log(`stopping! interval`)
       delete WORLD.powerupIntervalForPlusOne
       addOne.stop()
     }, addOne.lifetime)

@@ -12,6 +12,10 @@ export const WORLD = {
     down: null,
     left: null,
     right: null,
-    space: null
+    space: null,
+    w: null,
+    a: null,
+    s: null,
+    d: null
   }
 }

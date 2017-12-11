@@ -39,6 +39,27 @@ export const Circle = {
   of: ({x, y, a, _radius}) => new PCircle(x, y, _radius || a)
 }
 
+export const Bullet = {
+  of: ({x, y, radius, vector}) => ({
+    _circle: Circle.of(x, y, radius),
+    x,
+    y,
+    radius,
+    vector
+  })
+}
+
+export const Vector = {
+  of: (x = 0, y = 0) => ({ x, y })
+}
+
+export const applyVector = (target, vector, speed) => {
+  return {
+    x: target.x + (vector.x * speed),
+    y: target.y + (vector.y * speed)
+  }
+}
+
 // the idea is that you can basically have simpler conditional functions
 // which only take effect when a certain condition is true
 // in this case, this was originally designed to pull feature flags into a condition

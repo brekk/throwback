@@ -1,7 +1,8 @@
 import throttle from 'lodash/fp/throttle'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Bullet, Vector} from '../util'
+import {Bullet} from '../models'
+import {Vector} from '../util'
 
 const {bullets} = CONFIG
 const {fireRate} = bullets // bullets per this as milli

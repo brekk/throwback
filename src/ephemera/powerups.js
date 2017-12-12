@@ -2,17 +2,10 @@
 import {curry} from 'ramda'
 import {CONFIG, GAME_CONFIG} from '../config'
 import {WORLD} from '../world'
-import {
-  Circle
-  // throtLog
-} from '../util'
-
-// const {Geom} = Phaser
-// const {Circle} = Geom
+import {Circle} from '../models'
+// import {throtLog} from '../util'
 
 const {powerups} = CONFIG
-/*
- */
 
 export const addPowerUp = curry((which, creator) => () => {
   let id

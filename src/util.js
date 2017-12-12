@@ -1,5 +1,4 @@
 import {curry, map} from 'ramda'
-import Phaser from 'phaser'
 import throttle from 'lodash/fp/throttle'
 import {GAME_CONFIG} from './config'
 
@@ -31,23 +30,6 @@ export const ephemeraInBounds = (b) => (
   b.x < GAME_CONFIG.width &&
   b.x > 0
 )
-
-const {Geom} = Phaser
-const {Circle: PCircle} = Geom
-// abstract over the original code we wrote and using proper PhaserCircles
-export const Circle = {
-  of: ({x, y, a, _radius}) => new PCircle(x, y, _radius || a)
-}
-
-export const Bullet = {
-  of: ({x, y, radius, vector}) => ({
-    _circle: Circle.of(x, y, radius),
-    x,
-    y,
-    radius,
-    vector
-  })
-}
 
 export const Vector = {
   of: (x = 0, y = 0) => ({ x, y })

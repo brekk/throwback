@@ -22,6 +22,10 @@ export const randomize = curry(
     (x) => (Math.random() * x * amount),
     input
   )
+  // ^ We should strongly considered switching to 'seeded' randomness
+  //   this would allow us to reproduce exact runs in test
+  //   this approach seems great to me:
+  //   https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript/23304189#23304189
 )
 
 export const ephemeraInBounds = (b) => (

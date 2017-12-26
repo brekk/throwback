@@ -1,5 +1,4 @@
 import {curry, map} from 'ramda'
-import Phaser from 'phaser'
 import throttle from 'lodash/fp/throttle'
 import {GAME_CONFIG} from './config'
 
@@ -32,11 +31,19 @@ export const ephemeraInBounds = (b) => (
   b.x > 0
 )
 
-const {Geom} = Phaser
-const {Circle: PCircle} = Geom
-// abstract over the original code we wrote and using proper PhaserCircles
-export const Circle = {
-  of: ({x, y, a, _radius}) => new PCircle(x, y, _radius || a)
+export const Vector = {
+  of: (x = 0, y = 0) => ({ x, y }),
+  UP: {x: 0, y: -1},
+  DOWN: {x: 0, y: 1},
+  LEFT: {x: -1, y: 0},
+  RIGHT: {x: 1, y: 0}
+}
+
+export const applyVector = (target, vector, speed) => {
+  return {
+    x: target.x + (vector.x * speed),
+    y: target.y + (vector.y * speed)
+  }
 }
 
 // the idea is that you can basically have simpler conditional functions

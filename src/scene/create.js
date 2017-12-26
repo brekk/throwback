@@ -5,9 +5,6 @@ import {create as createFeatures} from '../features'
 import {SPRITES} from '../sprites'
 
 const KEYS = Phaser.Input.Keyboard.KeyCodes
-// console.log(Object.keys(KEYS))
-// TODO: figure out why D doesn't work. (tried WASD config, but the D key was furked)
-
 export function create() {
   WORLD.inputs = this.input.keyboard.addKeys({
     up: KEYS.UP,
@@ -15,7 +12,11 @@ export function create() {
     left: KEYS.LEFT,
     right: KEYS.RIGHT,
     alt: KEYS.SHIFT,
-    space: KEYS.SPACE
+    space: KEYS.SPACE,
+    w: KEYS.W,
+    a: KEYS.A,
+    s: KEYS.S,
+    d: KEYS.D
   })
   // console.log(WORLD.inputs.right)
   WORLD.player.image = this.add.image(

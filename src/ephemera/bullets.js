@@ -25,7 +25,7 @@ const fireBullet = (vector) => throttle(fireRate, () => {
 })
 
 // We should move these to the player maybe?
-export const fireLeft = fireBullet(Vector.left)
-export const fireRight = fireBullet(Vector.right)
-export const fireUp = fireBullet(Vector.up)
-export const fireDown = fireBullet(Vector.down)
+export const fireLeft = fireBullet(Vector.LEFT)
+export const fireRight = fireBullet(Vector.RIGHT)
+export const fireUp = fireBullet(Vector.UP)
+export const fireDown = fireBullet(Vector.DOWN)

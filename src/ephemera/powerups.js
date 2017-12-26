@@ -2,7 +2,7 @@
 import {curry} from 'ramda'
 import {CONFIG, GAME_CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Circle} from '../models'
+import {Circle} from '../models/base'
 // import {throtLog} from '../util'
 
 const {powerups} = CONFIG

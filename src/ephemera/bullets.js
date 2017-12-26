@@ -1,7 +1,7 @@
 import throttle from 'lodash/fp/throttle'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Bullet} from '../models'
+import {Bullet} from '../models/bullet'
 import {Vector} from '../util'
 
 const {bullets} = CONFIG

@@ -19,5 +19,5 @@ export const wave = (n) => {
   const hardEnemies = times(() => Enemy.HARD(getInboundsSpawnPosition()), numHard)
   const easyEnemies = times(() => Enemy.EASY(getInboundsSpawnPosition()), numEasy)
   console.log(`wave ${n} easy: ${easyEnemies}, hard: ${hardEnemies}`)
-  return easyEnemies.concat(hardEnemies)
+  return [...easyEnemies, ...hardEnemies]
 }

@@ -9,7 +9,6 @@ const {Triangle: PTriangle} = Phaser.Geom
 
 const _enemy = (x, y, length, hitPoints, color) => {
   const geom = Triangle.equilateral(x, y, length)
-  let angle = 0
   let hp = hitPoints
   const draw = () => {
     WORLD.graphics.lineStyle(2, CONFIG.colors.white, 2)
@@ -38,7 +37,6 @@ const _enemy = (x, y, length, hitPoints, color) => {
       x: () => x,
       y: () => y,
       length: () => length,
-      angle: () => angle,
       hp: () => hp
     },
     events: {

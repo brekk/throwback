@@ -10,7 +10,6 @@ const EXPLOSION_DURATION = 5
 
 const _explosion = ({x, y, size, color}) => {
   const geom = Triangle.equilateral(x, y, size)
-  let angle = 0
   let ticks = 0
   let isDone = false
   const draw = () => {
@@ -35,7 +34,6 @@ const _explosion = ({x, y, size, color}) => {
     properties: {
       x: () => x,
       y: () => y,
-      angle: () => angle,
       isDone: () => isDone
     },
     events: {

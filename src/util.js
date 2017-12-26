@@ -33,10 +33,10 @@ export const ephemeraInBounds = (b) => (
 
 export const Vector = {
   of: (x = 0, y = 0) => ({ x, y }),
-  up: {x: 0, y: -1},
-  down: {x: 0, y: 1},
-  left: {x: -1, y: 0},
-  right: {x: 1, y: 0}
+  UP: {x: 0, y: -1},
+  DOWN: {x: 0, y: 1},
+  LEFT: {x: -1, y: 0},
+  RIGHT: {x: 1, y: 0}
 }
 
 export const applyVector = (target, vector, speed) => {

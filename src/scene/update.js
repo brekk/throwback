@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
 import {Bullet} from '../models/bullet'
+import {Explosion} from '../models/explosion'
 import {wave} from '../enemyWaves'
 import {fireUp, fireDown, fireLeft, fireRight} from '../ephemera/bullets'
 import {addPlusOne} from '../ephemera/powerups'
@@ -99,6 +100,7 @@ function updateBullets() {
     }
     if (hitEnemies.length > 0) {
       hitEnemies.forEach((e) => e.events.onHit())
+      WORLD.ephemera.effects.push(Explosion.at({x: newX, y: newY, size: 14, color: CONFIG.colors.white}))
     }
     // ^ TODO: collision logic can be moved to somewhere else.
   }
@@ -119,6 +121,11 @@ function updateEnemies() {
   WORLD.ephemera.enemies.forEach((e) => e.events.update())
 }
 
+function updateEffects() {
+  WORLD.ephemera.effects = WORLD.ephemera.effects.filter((e) => !e.properties.isDone())
+  WORLD.ephemera.effects.forEach((e) => e.events.update())
+}
+
 export function update() {
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))
@@ -126,6 +133,7 @@ export function update() {
   updatePowerUps()
   updateBullets()
   updateEnemies()
+  updateEffects()
   // handleCollisions()
   // handleSpawns()
   //   ie: powerups, new enemy wave, etc.; could think of these as 'handle timers/triggers'

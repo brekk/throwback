@@ -7,6 +7,7 @@ export const WORLD = {
   ephemera: {
     bullets: [],
     enemies: [],
+    effects: [],
     wave: 0
   },
   inputs: {

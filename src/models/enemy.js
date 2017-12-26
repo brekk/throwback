@@ -17,8 +17,7 @@ const _enemy = (x, y, length, hitPoints, color) => {
     WORLD.graphics.fillTriangleShape(geom)
   }
   const animateIdle = () => {
-    angle += 0.005
-    PTriangle.RotateAroundXY(geom, x, y, angle)
+    PTriangle.Rotate(geom, 0.1)
   }
   const applyBehavior = () => {
     // TODO!

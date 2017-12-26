@@ -43,5 +43,5 @@ const _explosion = ({x, y, size, color}) => {
 }
 
 export const Explosion = {
-  at: ({x, y, size, color}) => _explosion({x, y, size, color})
+  at: ({x, y, size = 14, color = CONFIG.colors.white}) => _explosion({x, y, size, color})
 }

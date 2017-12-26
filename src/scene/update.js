@@ -100,7 +100,7 @@ function updateBullets() {
     }
     if (hitEnemies.length > 0) {
       hitEnemies.forEach((e) => e.events.onHit())
-      WORLD.ephemera.effects.push(Explosion.at({x: newX, y: newY, size: 14, color: CONFIG.colors.white}))
+      WORLD.ephemera.effects.push(Explosion.at({x: newX, y: newY}))
     }
     // ^ TODO: collision logic can be moved to somewhere else.
   }

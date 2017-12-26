@@ -15,9 +15,14 @@ export const CONFIG = Object.freeze({
     speed: 10,
     fireRate: 150
   },
+  enemies: {
+    size: 25
+  },
   colors: {
     yellow: 0xffff00,
-    white: 0xffffff
+    white: 0xffffff,
+    red: 0xff0000,
+    black: 0x000000
   }
 })
 

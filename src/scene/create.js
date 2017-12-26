@@ -27,6 +27,7 @@ export function create() {
   WORLD.graphics = this.add.graphics()
   WORLD.ephemera.bullets = []
   WORLD.ephemera.powerups = []
+  WORLD.ephemera.wave = 0
   // Add boundaries at the screen edge
   this.physics.world.setBounds()
 

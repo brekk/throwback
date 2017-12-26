@@ -5,7 +5,9 @@ export const WORLD = {
     physics: null
   },
   ephemera: {
-    bullets: []
+    bullets: [],
+    enemies: [],
+    wave: 0
   },
   inputs: {
     up: null,

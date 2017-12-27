@@ -31,6 +31,7 @@ const _explosion = ({x, y, size, color}) => {
   draw()
   return {
     _triangle: geom,
+    // ^ Todo: This should become a computed property so we don't have to update it when everything else updates.
     properties: {
       x: () => x,
       y: () => y,

@@ -1,5 +1,6 @@
 // import Phaser from 'phaser'
 import {WORLD} from '../../world'
+import {Circle} from '../../models/base'
 import {randomize} from '../../util'
 // const {Geom} = Phaser
 // const {Circle} = Geom
@@ -32,7 +33,11 @@ export const updateEphemeraPost = (ephemera) => {
       y: randomize(yMod, ephemera.y),
       radius: randomize(ephemera.radius, ephemera.radius)
     })
+    newBullet._circle = Circle.of({x: newBullet.x, y: newBullet.y, radius: newBullet.radius})
+    // ^ TODO: This should become a computed property so we don't have to update it when everything else updates.
     WORLD.ephemera.bullets.push(newBullet)
   }
+  ephemera._circle = Circle.of({x: ephemera.x, y: ephemera.y, radius: ephemera.radius})
+  // ^ TODO: This should become a computed property so we don't have to update it when everything else updates.
   return ephemera
 }

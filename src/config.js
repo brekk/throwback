@@ -12,7 +12,7 @@ export const CONFIG = Object.freeze({
   },
   player: {
     baseFireRate: 150,
-    baseHp: 1,
+    baseHp: 3,
     baseBulletSpeed: 10,
     baseBulletSize: 5
   },

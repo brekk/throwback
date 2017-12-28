@@ -1,10 +1,13 @@
+import Phaser from 'phaser'
 import throttle from 'lodash/fp/throttle'
 
 import {GAME_CONFIG, CONFIG} from '../config'
 import {SPRITES} from '../sprites'
 import {WORLD} from '../world'
 import {Vector} from '../util'
+import {Explosion} from './explosion'
 import {Bullet} from './bullet'
+import {Triangle} from './base'
 
 const {player: playerConfig, friction, acceleration} = CONFIG
 
@@ -53,7 +56,13 @@ const init = (ctx) => {
   return {
     _engine: {
       image,
-      physics
+      physics,
+      _triangle: () => Triangle.equilateral({
+        x: physics.body.pos.x,
+        y: physics.body.pos.y,
+        length: physics.body.size.x
+      })
+      // ^ Naive; used for bullet collision detection. I'm sure phaser has something better.
     },
     // ^ I think ideally we don't all of these should be controlled by commands.
     //   still exporting for now but should remove.
@@ -66,7 +75,8 @@ const init = (ctx) => {
       fireRate: () => _props.fireRate,
       position,
       fireFromPosition,
-      size
+      size,
+      isDead: () => _props.hp <= 0
     },
     commands: {
       moveLeft: () => physics.setVelocityX(-acceleration), // See also .setAcceleration
@@ -79,6 +89,23 @@ const init = (ctx) => {
       shootDown: throttle(_props.fireRate, () => shootTowards(Vector.DOWN, fireFromPosition(), _props))
       // ^ TODO: all of these throttle functions need to be computed too so we can vary fireRate at runtime
       //         yet another case for mobx
+    },
+    events: {
+      onHit: () => {
+        _props.hp--
+        console.debug(`Player Hit! HP: ${_props.hp}`)
+        if (_props.hp <= 0) {
+          const {x, y} = position()
+          const baseSize = 6
+          const red = CONFIG.colors.red
+          WORLD.ephemera.effects.push(Explosion.at({x, y, size: baseSize * 10, color: red}))
+          WORLD.ephemera.effects.push(Explosion.at({x: x + 5, y, size: baseSize * 11, color: red}))
+          WORLD.ephemera.effects.push(Explosion.at({x: x + 5, y: y - 5, size: baseSize * 8, color: red}))
+          WORLD.ephemera.effects.push(Explosion.at({x: x - 5, y: y + 5, size: baseSize * 4, color: red}))
+          WORLD.ephemera.effects.push(Explosion.at({x: x - 2, y: y + 5, size: baseSize * 10, color: red}))
+          WORLD.ephemera.effects.push(Explosion.at({x, y: y - 5, size: baseSize * 9, color: red}))
+        }
+      },
     }
   }
 }

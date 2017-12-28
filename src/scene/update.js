@@ -1,12 +1,14 @@
 import Phaser from 'phaser'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Bullet} from '../models/bullet'
 import {Explosion} from '../models/explosion'
 import {wave} from '../enemyWaves'
 import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
-import {applyVector, ephemeraInBounds, throtLog} from '../util'
+import {ephemeraInBounds, throtLog} from '../util'
+
+const {colors} = CONFIG
+const {red} = colors
 
 function handlePlayerInput() {
   const {inputs, player} = WORLD
@@ -63,48 +65,55 @@ function updatePowerUps() {
 }
 
 function updateBullets() {
-  const {ephemera = {}} = WORLD
-  const {colors} = CONFIG
-  const {yellow, white} = colors
-  const {powerups, bullets, enemies} = ephemera
-  
-  for (let i = 0; i < bullets.length; i++) {
-    const bullet = bullets[i]
-    updateEphemeraPre(i)
-    const {x: newX, y: newY} = applyVector(bullet, bullet.vector, bullet.speed)
-    const movedBullet = updateEphemeraPost(Bullet.of({
-      x: newX,
-      y: newY,
-      radius: bullet.radius,
-      vector: bullet.vector,
-      speed: bullet.speed,
-      owner: bullet.owner
-    }))
-    WORLD.ephemera.bullets[i] = movedBullet
-    WORLD.graphics.lineStyle(2, yellow, 2)
-    WORLD.graphics.fillStyle(WORLD.wiggleShot ? white : yellow, 1)
-    WORLD.graphics.fillCircle(movedBullet.x, movedBullet.y, movedBullet.radius)
-    // ^ TODO: move the 'movement' and 'draw' logic to models.bullets.events.update
-
-    const hitPowerups = powerups.filter(
-      (x) => Phaser.Geom.Intersects.CircleToCircle(x, movedBullet._circle)
-    )
-    const hitEnemies = enemies.filter(
-      (e) => Phaser.Geom.Intersects.TriangleToCircle(e._triangle, movedBullet._circle)
-    )
-    if (bullet.owner === `player` && hitPowerups.length > 0) {
-      WORLD.ephemera.powerups = []
+  const bullets = WORLD.ephemera.bullets
+  bullets.forEach((b, i) => {
+    const isPlayerBullet = b.properties.owner() === `player`
+    if (isPlayerBullet) {
+      updateEphemeraPre(i)
     }
-    if (bullet.owner === `player` && hitEnemies.length > 0) {
-      hitEnemies.forEach((e) => e.events.onHit())
-      WORLD.ephemera.effects.push(Explosion.at({x: newX, y: newY, size: bullet.radius * 10}))
+    b.update()
+    if (isPlayerBullet) {
+      const newBullet = updateEphemeraPost(b)
+      bullets[i] = newBullet
+      // ^ TODO: this should all be moved into the bullet
+      //         so we don't have to overwrite the array spot
     }
-    // ^ TODO: collision logic can be moved to somewhere else.
-  }
+    b.draw()
+  })
 
-  WORLD.ephemera.bullets = WORLD.ephemera.bullets.filter(ephemeraInBounds)
+  WORLD.ephemera.bullets = bullets.filter(ephemeraInBounds)
   // throtLog(`%c$$$$`, `background-color: red;`, WORLD.ephemeraBullets.length)
   // WORLD.ephemeraBullets = filtered
+}
+
+function handleCollisions() {
+  const {ephemera = {}, player} = WORLD
+  const {powerups, bullets, enemies} = ephemera
+  const colliders = Phaser.Geom.Intersects
+
+  bullets.forEach((b) => {
+    const isPlayerBullet = b.properties.owner() === `player`
+    const {x, y} = b.properties.position()
+
+    if (isPlayerBullet) {
+      const hitPowerups = powerups.filter((p) => colliders.CircleToCircle(p, b._engine._circle()))
+      const hitEnemies = enemies.filter((e) => colliders.TriangleToCircle(e._triangle, b._engine._circle()))
+      if (hitPowerups.length > 0) {
+        WORLD.ephemera.powerups = []
+      }
+      if (hitEnemies.length > 0) {
+        hitEnemies.forEach((e) => e.events.onHit(b))
+        WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10}))
+      }
+    }
+    if (!isPlayerBullet) {
+      const hitPlayer = colliders.TriangleToCircle(player._engine._triangle(), b._engine._circle())
+      if (hitPlayer) {
+        player.events.onHit(b)
+        WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10, color: red}))
+      }
+    }
+  })
 }
 
 function updateEnemies() {
@@ -127,15 +136,18 @@ export function update() {
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))
   // console.log(`this`, this)
-  updatePowerUps()
-  updateBullets()
   updateEnemies()
+  updateBullets()
   updateEffects()
-  // handleCollisions()
-  // handleSpawns()
-  //   ie: powerups, new enemy wave, etc.; could think of these as 'handle timers/triggers'
-  //   * when(Every.time.seconds(15), spawnPowerup)
-  //   * when(WORLD.ephemera.enemies.length === 0, spawnEnemyWave)
-  handlePlayerInput()
+  if (!WORLD.player.properties.isDead()) {
+    updatePowerUps()
+    handleCollisions()
+    // handleSpawns()
+    //   ie: powerups, new enemy wave, etc.; could think of these as 'handle timers/triggers'
+    //   * when(Every.time.seconds(15), spawnPowerup)
+    //   * when(WORLD.ephemera.enemies.length === 0, spawnEnemyWave)
+    handlePlayerInput()
+  } else {
+  }
   // updatePost(WORLD)
 }

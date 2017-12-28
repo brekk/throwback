@@ -28,12 +28,13 @@ export const randomize = curry(
   //   https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript/23304189#23304189
 )
 
-export const ephemeraInBounds = (b) => (
-  b.y < GAME_CONFIG.height &&
-  b.y > 0 &&
-  b.x < GAME_CONFIG.width &&
-  b.x > 0
-)
+export const ephemeraInBounds = (b) => {
+  const {x, y} = b.properties.position()
+  return y < GAME_CONFIG.height &&
+  y > 0 &&
+  x < GAME_CONFIG.width &&
+  x > 0
+}
 
 const _vector = (x = 0, y = 0) => ({ x, y })
 

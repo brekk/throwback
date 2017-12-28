@@ -1,6 +1,7 @@
 export const WORLD = {
   graphics: null,
   player: null,
+  score: 0,
   ephemera: {
     bullets: [],
     enemies: [],

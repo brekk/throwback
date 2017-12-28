@@ -103,7 +103,10 @@ function handleCollisions() {
         b.hitSomething = true
       }
       if (hitEnemies.length > 0) {
-        hitEnemies.forEach((e) => e.events.onHit(b))
+        hitEnemies.forEach((e) => {
+          e.events.onHit(b)
+          WORLD.score++
+        })
         WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10}))
         b.hitSomething = true
       }

@@ -99,7 +99,7 @@ const init = (ctx) => {
     events: {
       onHit: () => {
         _props.hp--
-        console.debug(`Player Hit! HP: ${_props.hp}`)
+        console.debug(`Player Hit! HP: ${_props.hp}, Score: ${WORLD.score}`)
         if (_props.hp <= 0) {
           const {x, y} = position()
           const baseSize = 6

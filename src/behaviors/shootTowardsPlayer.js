@@ -7,6 +7,6 @@ export const shootTowardsPlayer = (fireFromPosition, size, speed) => {
   const targetVector = Vector.fromTo(fireFromPosition, player.properties.position())
   console.log(targetVector)
   const {x, y} = fireFromPosition
-  const b = Bullet.of({x, y, radius: size, vector: targetVector, speed})
+  const b = Bullet.of({x, y, radius: size, vector: targetVector, speed, owner: `enemy`})
   WORLD.ephemera.bullets.push(b)
 }

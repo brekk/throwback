@@ -31,7 +31,7 @@ const createPhaserObjects = (ctx) => {
 const shootTowards = (targetVector, fireFromPosition, _props) => {
   const {bulletSize, bulletSpeed} = _props
   const {x, y} = fireFromPosition
-  const b = Bullet.of({x, y, radius: bulletSize, vector: targetVector, speed: bulletSpeed})
+  const b = Bullet.of({x, y, radius: bulletSize, vector: targetVector, speed: bulletSpeed, owner: `player`})
   WORLD.ephemera.bullets.push(b)
 }
 

@@ -77,7 +77,8 @@ function updateBullets() {
       y: newY,
       radius: bullet.radius,
       vector: bullet.vector,
-      speed: bullet.speed
+      speed: bullet.speed,
+      owner: bullet.owner
     }))
     WORLD.ephemera.bullets[i] = movedBullet
     WORLD.graphics.lineStyle(2, yellow, 2)
@@ -91,10 +92,10 @@ function updateBullets() {
     const hitEnemies = enemies.filter(
       (e) => Phaser.Geom.Intersects.TriangleToCircle(e._triangle, movedBullet._circle)
     )
-    if (hitPowerups.length > 0) {
+    if (bullet.owner === `player` && hitPowerups.length > 0) {
       WORLD.ephemera.powerups = []
     }
-    if (hitEnemies.length > 0) {
+    if (bullet.owner === `player` && hitEnemies.length > 0) {
       hitEnemies.forEach((e) => e.events.onHit())
       WORLD.ephemera.effects.push(Explosion.at({x: newX, y: newY, size: bullet.radius * 10}))
     }

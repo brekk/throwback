@@ -1,13 +1,15 @@
 import Phaser from 'phaser'
+import throttle from 'lodash/fp/throttle'
 
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
+import {shootTowardsPlayer} from '../behaviors/shootTowardsPlayer'
 import {Triangle} from './base'
 
-const enemySize = CONFIG.enemies.size
+const {size, baseFireRate, baseBulletSpeed, baseBulletSize} = CONFIG.enemies
 const {Triangle: PTriangle} = Phaser.Geom
 
-const _enemy = (x, y, length, hitPoints, color) => {
+const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
   const geom = Triangle.equilateral(x, y, length)
   let hp = hitPoints
   const draw = () => {
@@ -18,11 +20,10 @@ const _enemy = (x, y, length, hitPoints, color) => {
   const animateIdle = () => {
     PTriangle.Rotate(geom, 0.1)
   }
+  console.log(`shot... fireRate: ${fireRate}, bulletSize: ${baseBulletSize}`)
+  const throttledShot = throttle(fireRate, () => shootTowardsPlayer({x, y}, baseBulletSize, baseBulletSpeed))
   const applyBehavior = () => {
-    // TODO!
-    //  ie: BEHAVIOR.bobAndWeave, or BEHAVIOR.chasePlayer
-    //  * should be passed in at creation and changed based on state etc.
-    //  * like an enemy that has 'phases' triggered by hitpoints etc.
+    throttledShot()
   }
   const update = () => {
     animateIdle()
@@ -48,8 +49,29 @@ const _enemy = (x, y, length, hitPoints, color) => {
   // ^ think this would all be a good fit for something like MobX
 }
 
+const easy = ({x, y}) => {
+  return _enemy({
+    x,
+    y,
+    length: size,
+    hitPoints: 1,
+    fireRate: baseFireRate,
+    color: CONFIG.colors.yellow
+  })
+}
+const hard = ({x, y}) => {
+  return _enemy({
+    x,
+    y,
+    length: size,
+    hitPoints: 3, // More hit points
+    fireRate: baseFireRate * 0.85, // Faster shooting speed
+    color: CONFIG.colors.red // different color
+  })
+}
+
 export const Enemy = {
   of: _enemy,
-  EASY: ({x, y}) => _enemy(x, y, enemySize, 1, CONFIG.colors.yellow),
-  HARD: ({x, y}) => _enemy(x, y, enemySize, 3, CONFIG.colors.red)
+  EASY: easy,
+  HARD: hard
 }

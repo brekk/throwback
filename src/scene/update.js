@@ -4,40 +4,37 @@ import {WORLD} from '../world'
 import {Bullet} from '../models/bullet'
 import {Explosion} from '../models/explosion'
 import {wave} from '../enemyWaves'
-import {fireUp, fireDown, fireLeft, fireRight} from '../ephemera/bullets'
 import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
 import {applyVector, ephemeraInBounds, throtLog} from '../util'
 
 function handlePlayerInput() {
-  const {inputs} = WORLD
-  const {acceleration} = CONFIG
+  const {inputs, player} = WORLD
   const {left, right, up, down, w, a, s, d} = inputs
 
-  // We also tried player.physics.setVelocity(0, 0) here instead of friction
   if (left.isDown) {
-    WORLD.player.physics.setVelocityX(-acceleration) // See also .setAcceleration
+    player.commands.moveLeft()
   } else if (right.isDown) {
-    WORLD.player.physics.setVelocityX(acceleration)
+    player.commands.moveRight()
   }
 
-  // Not else if here so they can move left & up at the same time, etc.
+  // If rather than else if here so they can move left & up at the same time, etc.
+  /* userConfig.invertXY <- here is where config can solve this crisis :) */
   if (up.isDown) {
-    WORLD.player.physics.setVelocityY(-acceleration)
-  // this seems existential
+    player.commands.moveUp()
   } else if (down.isDown) {
-    WORLD.player.physics.setVelocityY(acceleration)
+    player.commands.moveDown()
   }
 
   // Can only fire in one direction at a time.
   if (w.isDown) {
-    fireUp()
+    player.commands.fireUp()
   } else if (a.isDown) {
-    fireLeft()
+    player.commands.fireLeft()
   } else if (s.isDown) {
-    fireDown()
+    player.commands.fireDown()
   } else if (d.isDown) {
-    fireRight()
+    player.commands.fireRight()
   }
 }
 

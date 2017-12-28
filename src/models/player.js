@@ -6,8 +6,7 @@ import {WORLD} from '../world'
 import {Vector} from '../util'
 import {Bullet} from './bullet'
 
-const {bullets, friction, acceleration} = CONFIG
-const {fireRate} = bullets // bullets per this as milli
+const {player: playerConfig, friction, acceleration} = CONFIG
 
 const createPhaserObjects = (ctx) => {
   const image = ctx.add.image(
@@ -29,46 +28,57 @@ const createPhaserObjects = (ctx) => {
   return {image, physics}
 }
 
-const shootTowards = (origin, size, targetVector) => throttle(fireRate, () => {
-  const offset = bullets.speed
-  const bulletX = origin.x + (size.x / 2) + (offset * targetVector.x)
-  const bulletY = origin.y + (size.y / 2) + (offset * targetVector.y)
-  const b = Bullet.of({
-    x: bulletX,
-    y: bulletY,
-    radius: 5,
-    vector: targetVector
-  })
+const shootTowards = (targetVector, fireFromPosition, _props) => {
+  const {bulletSize, bulletSpeed} = _props
+  const {x, y} = fireFromPosition
+  const b = Bullet.of({x, y, radius: bulletSize, vector: targetVector, speed: bulletSpeed})
   WORLD.ephemera.bullets.push(b)
-})
+}
 
-const init = (ctx, hp) => {
+const init = (ctx) => {
   const {image, physics} = createPhaserObjects(ctx)
-  const position = () => ({x: physics.body.pos.x, y: physics.body.pos.y})
-  const size = () => ({x: physics.body.size.x, y: physics.body.size.y})
-  const _props = {hp}
+  const position = () => physics.body.pos
+  const fireFromPosition = () => ({
+    x: physics.body.pos.x + (physics.body.size.x) / 2,
+    y: physics.body.pos.y + (physics.body.size.y) / 2
+  })
+  const size = () => physics.body.size
+  const _props = {
+    hp: playerConfig.baseHp,
+    fireRate: playerConfig.baseFireRate,
+    bulletSpeed: playerConfig.baseBulletSpeed,
+    bulletSize: playerConfig.baseBulletSize
+  }
 
   return {
     _engine: {
       image,
       physics
     },
+    // ^ I think ideally we don't all of these should be controlled by commands.
+    //   still exporting for now but should remove.
     properties: {
       x: () => physics.body.x,
       y: () => physics.body.y,
       hp: () => _props.hp,
+      bulletSize: () => _props.bulletSize,
+      bulletSpeed: () => _props.bulletSpeed,
+      fireRate: () => _props.fireRate,
       position,
+      fireFromPosition,
       size
     },
     commands: {
-      moveLeft: physics.setVelocityX(-acceleration), // See also .setAcceleration
-      moveRight: physics.setVelocityX(acceleration),
-      moveUp: physics.setVelocityY(-acceleration),
-      moveDown: physics.setVelocityY(acceleration),
-      shootLeft: shootTowards(position, size, Vector.LEFT),
-      shootRight: shootTowards(position, size, Vector.RIGHT),
-      shootUp: shootTowards(position, size, Vector.UP),
-      shootDown: shootTowards(position, size, Vector.DOWN)
+      moveLeft: () => physics.setVelocityX(-acceleration), // See also .setAcceleration
+      moveRight: () => physics.setVelocityX(acceleration),
+      moveUp: () => physics.setVelocityY(-acceleration),
+      moveDown: () => physics.setVelocityY(acceleration),
+      shootLeft: throttle(_props.fireRate, () => shootTowards(Vector.LEFT, fireFromPosition(), _props)),
+      shootRight: throttle(_props.fireRate, () => shootTowards(Vector.RIGHT, fireFromPosition(), _props)),
+      shootUp: throttle(_props.fireRate, () => shootTowards(Vector.UP, fireFromPosition(), _props)),
+      shootDown: throttle(_props.fireRate, () => shootTowards(Vector.DOWN, fireFromPosition(), _props))
+      // ^ TODO: all of these throttle functions need to be computed too so we can vary fireRate at runtime
+      //         yet another case for mobx
     }
   }
 }

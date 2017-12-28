@@ -17,7 +17,7 @@ function handlePlayerInput() {
   } else if (right.isDown) {
     player.commands.moveRight()
   }
-
+  
   // If rather than else if here so they can move left & up at the same time, etc.
   /* userConfig.invertXY <- here is where config can solve this crisis :) */
   if (up.isDown) {
@@ -28,13 +28,13 @@ function handlePlayerInput() {
 
   // Can only fire in one direction at a time.
   if (w.isDown) {
-    player.commands.fireUp()
+    player.commands.shootUp()
   } else if (a.isDown) {
-    player.commands.fireLeft()
+    player.commands.shootLeft()
   } else if (s.isDown) {
-    player.commands.fireDown()
+    player.commands.shootDown()
   } else if (d.isDown) {
-    player.commands.fireRight()
+    player.commands.shootRight()
   }
 }
 
@@ -68,17 +68,16 @@ function updateBullets() {
   const {yellow, white} = colors
   const {powerups, bullets, enemies} = ephemera
   
-  // TODO: scale on acceleration instead so we can tweak this globally
-  const {bullets: bulletConfig} = CONFIG
   for (let i = 0; i < bullets.length; i++) {
     const bullet = bullets[i]
     updateEphemeraPre(i)
-    const {x: newX, y: newY} = applyVector(bullet, bullet.vector, bulletConfig.speed)
+    const {x: newX, y: newY} = applyVector(bullet, bullet.vector, bullet.speed)
     const movedBullet = updateEphemeraPost(Bullet.of({
       x: newX,
       y: newY,
       radius: bullet.radius,
-      vector: bullet.vector
+      vector: bullet.vector,
+      speed: bullet.speed
     }))
     WORLD.ephemera.bullets[i] = movedBullet
     WORLD.graphics.lineStyle(2, yellow, 2)

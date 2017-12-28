@@ -10,9 +10,9 @@ const {powerups} = CONFIG
 export const addPowerUp = curry((which, creator) => () => {
   let id
   const base = powerups[which]
-  // console.log(`generating powerup maker for ${base.sprite}`)
+  // console.debug(`generating powerup maker for ${base.sprite}`)
   const render = (entity) => {
-    // console.log(`adding powerup ${base.sprite}`)
+    // console.debug(`adding powerup ${base.sprite}`)
     // const {entity} = creator(base)
     if (!entity) {
       entity = creator(base)
@@ -21,7 +21,7 @@ export const addPowerUp = curry((which, creator) => () => {
     WORLD.graphics.lineStyle(2, 0xffff00, 2)
     WORLD.graphics.fillStyle(0xff0000, 1)
     WORLD.graphics.fillCircle(entity.x, entity.y, entity._radius)
-    // console.log(WORLD.graphics, `world gfx`)
+    // console.debug(WORLD.graphics, `world gfx`)
   }
   return Object.assign(
     {},

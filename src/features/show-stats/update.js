@@ -12,6 +12,6 @@ export function updatePre(add) {
       10,
       `Stats: ${shots} shots ${hits} hits ${targets} targets`
     )
-    // console.log(`>>>`, WORLD.stats.text)
+    // console.debug(`>>>`, WORLD.stats.text)
   }
 }

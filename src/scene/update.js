@@ -100,10 +100,12 @@ function handleCollisions() {
       const hitEnemies = enemies.filter((e) => colliders.TriangleToCircle(e._triangle, b._engine._circle()))
       if (hitPowerups.length > 0) {
         WORLD.ephemera.powerups = []
+        b.hitSomething = true
       }
       if (hitEnemies.length > 0) {
         hitEnemies.forEach((e) => e.events.onHit(b))
         WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10}))
+        b.hitSomething = true
       }
     }
     if (!isPlayerBullet) {
@@ -111,9 +113,12 @@ function handleCollisions() {
       if (hitPlayer) {
         player.events.onHit(b)
         WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10, color: red}))
+        b.hitSomething = true
       }
     }
   })
+
+  WORLD.ephemera.bullets = bullets.filter((b) => !b.hitSomething)
 }
 
 function updateEnemies() {

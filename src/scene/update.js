@@ -133,13 +133,15 @@ function updateEffects() {
 }
 
 export function update() {
+  const player = WORLD.player
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))
   // console.debug(`this`, this)
   updateEnemies()
   updateBullets()
   updateEffects()
-  if (!WORLD.player.properties.isDead()) {
+  player.update()
+  if (!player.properties.isDead()) {
     updatePowerUps()
     handleCollisions()
     // handleSpawns()
@@ -147,8 +149,6 @@ export function update() {
     //   * when(Every.time.seconds(15), spawnPowerup)
     //   * when(WORLD.ephemera.enemies.length === 0, spawnEnemyWave)
     handlePlayerInput()
-  } else {
-    WORLD.player.events.onDeadIdle()
   }
   // updatePost(WORLD)
 }

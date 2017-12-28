@@ -52,6 +52,7 @@ const init = (ctx) => {
     bulletSpeed: playerConfig.baseBulletSpeed,
     bulletSize: playerConfig.baseBulletSize
   }
+  const isDead = () => _props.hp <= 0
 
   return {
     _engine: {
@@ -76,7 +77,7 @@ const init = (ctx) => {
       position,
       fireFromPosition,
       size,
-      isDead: () => _props.hp <= 0
+      isDead
     },
     commands: {
       moveLeft: () => physics.setVelocityX(-acceleration), // See also .setAcceleration
@@ -89,6 +90,11 @@ const init = (ctx) => {
       shootDown: throttle(_props.fireRate, () => shootTowards(Vector.DOWN, fireFromPosition(), _props))
       // ^ TODO: all of these throttle functions need to be computed too so we can vary fireRate at runtime
       //         yet another case for mobx
+    },
+    update: () => {
+      if (isDead()) {
+        image.angle += 0.55
+      }
     },
     events: {
       onHit: () => {
@@ -107,7 +113,7 @@ const init = (ctx) => {
         }
       },
       onDeadIdle: () => {
-        WORLD.player._engine.image.angle += 0.55
+        
       }
     }
   }

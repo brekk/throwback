@@ -1,4 +1,3 @@
-import Phaser from 'phaser'
 import throttle from 'lodash/fp/throttle'
 
 import {GAME_CONFIG, CONFIG} from '../config'
@@ -53,16 +52,17 @@ const init = (ctx) => {
     bulletSize: playerConfig.baseBulletSize
   }
   const isDead = () => _props.hp <= 0
+  const collider = () => Triangle.equilateral({
+    x: physics.body.pos.x + (physics.body.size.x / 2),
+    y: physics.body.pos.y,
+    length: physics.body.size.x
+  })
 
   return {
     _engine: {
       image,
       physics,
-      _triangle: () => Triangle.equilateral({
-        x: physics.body.pos.x,
-        y: physics.body.pos.y,
-        length: physics.body.size.x
-      })
+      _triangle: collider
       // ^ Naive; used for bullet collision detection. I'm sure phaser has something better.
     },
     // ^ I think ideally we don't all of these should be controlled by commands.
@@ -95,6 +95,10 @@ const init = (ctx) => {
       if (isDead()) {
         image.angle += 0.55
       }
+      // DEBUG: uncomment to draw the colliding triangle...
+      // WORLD.graphics.lineStyle(2, CONFIG.colors.white, 2)
+      // WORLD.graphics.fillStyle(CONFIG.colors.white, 1)
+      // WORLD.graphics.fillTriangleShape(collider())
     },
     events: {
       onHit: () => {
@@ -111,9 +115,6 @@ const init = (ctx) => {
           WORLD.ephemera.effects.push(Explosion.at({x: x - 2, y: y + 5, size: baseSize * 10, color: red}))
           WORLD.ephemera.effects.push(Explosion.at({x, y: y - 5, size: baseSize * 9, color: red}))
         }
-      },
-      onDeadIdle: () => {
-        
       }
     }
   }

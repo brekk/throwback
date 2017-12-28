@@ -36,8 +36,26 @@ export const ephemeraInBounds = (b) => (
 )
 
 const _vector = (x = 0, y = 0) => ({ x, y })
+
+/**
+ * Returns a _normalized_ vector from the origin to the target.
+ * 'Normalized' will scale the vector such that it will have a magnitude of 1
+ * @param {object} origin an object with x, y)
+ * @param {object} target an object with x, y)
+ * @returns {vector} a normalized vector from origin to target
+ */
+const vectorFromTo = (origin, target) => {
+  const {x: x1, y: y1} = origin
+  const {x: x2, y: y2} = target
+  const newX = x2 - x1
+  const newY = y2 - y1
+  const magnitude = Math.sqrt((newX ** 2) + (newY ** 2))
+  return {x: newX / magnitude, y: newY / magnitude}
+}
+
 export const Vector = {
   of: _vector,
+  fromTo: vectorFromTo,
   UP: _vector(0, -1),
   DOWN: _vector(0, 1),
   LEFT: _vector(-1, 0),

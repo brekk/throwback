@@ -12,7 +12,7 @@ import {Triangle} from './base'
 const {player: playerConfig, friction, acceleration} = CONFIG
 
 const createPhaserObjects = (ctx) => {
-  const image = ctx.add.image(
+  const image = ctx.add.sprite(
     GAME_CONFIG.width / 2,
     GAME_CONFIG.height * 0.25,
     SPRITES.PLAYER
@@ -106,6 +106,9 @@ const init = (ctx) => {
           WORLD.ephemera.effects.push(Explosion.at({x, y: y - 5, size: baseSize * 9, color: red}))
         }
       },
+      onDeadIdle: () => {
+        WORLD.player._engine.image.angle += 0.55
+      }
     }
   }
 }

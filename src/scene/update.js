@@ -148,6 +148,7 @@ export function update() {
     //   * when(WORLD.ephemera.enemies.length === 0, spawnEnemyWave)
     handlePlayerInput()
   } else {
+    WORLD.player.events.onDeadIdle()
   }
   // updatePost(WORLD)
 }

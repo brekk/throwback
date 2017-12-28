@@ -17,7 +17,6 @@ export function create() {
     s: KEYS.S,
     d: KEYS.D
   })
-  // console.log(WORLD.inputs.right)
   WORLD.graphics = this.add.graphics()
   WORLD.ephemera.bullets = []
   WORLD.ephemera.powerups = []

@@ -18,7 +18,7 @@ const environment = pipe(
   })
 )(FLAGS)
 
-console.log(`config!`, JSON.stringify(environment, null, 4))
+console.debug(`config!`, JSON.stringify(environment, null, 4))
 
 module.exports = {
 

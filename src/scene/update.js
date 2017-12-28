@@ -121,7 +121,7 @@ function updateEnemies() {
     WORLD.ephemera.wave++
     const _wave = wave(WORLD.ephemera.wave)
     WORLD.ephemera.enemies.push(..._wave)
-    console.log(`wave: ${WORLD.ephemera.wave}, numEnemies: ${WORLD.ephemera.enemies.length}`)
+    console.debug(`wave: ${WORLD.ephemera.wave}, numEnemies: ${WORLD.ephemera.enemies.length}`)
   }
   WORLD.ephemera.enemies = WORLD.ephemera.enemies.filter((e) => e.properties.hp() > 0)
   WORLD.ephemera.enemies.forEach((e) => e.events.update())
@@ -135,7 +135,7 @@ function updateEffects() {
 export function update() {
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))
-  // console.log(`this`, this)
+  // console.debug(`this`, this)
   updateEnemies()
   updateBullets()
   updateEffects()

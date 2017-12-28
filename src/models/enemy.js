@@ -20,7 +20,6 @@ const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
   const animateIdle = () => {
     PTriangle.Rotate(geom, 0.1)
   }
-  console.log(`shot... fireRate: ${fireRate}, bulletSize: ${baseBulletSize}`)
   const throttledShot = throttle(fireRate, () => shootTowardsPlayer({x, y}, baseBulletSize, baseBulletSpeed))
   const applyBehavior = () => {
     throttledShot()

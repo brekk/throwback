@@ -9,7 +9,7 @@ export const Circle = {
 }
 
 export const Triangle = {
-  equilateral: (x, y, length) => {
+  equilateral: ({x, y, length}) => {
     const height = length * (Math.sqrt(3) / 2)
     return new PTriangle(x, y, x + length / 2, y + height, x - length / 2, y + height)
   }

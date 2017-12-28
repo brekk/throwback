@@ -9,7 +9,7 @@ const {Triangle: PTriangle} = Phaser.Geom
 const EXPLOSION_DURATION = 5
 
 const _explosion = ({x, y, size, color}) => {
-  const geom = Triangle.equilateral(x, y, size)
+  const geom = Triangle.equilateral({x, y, length: size})
   let ticks = 0
   let isDone = false
   const draw = () => {

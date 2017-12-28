@@ -10,7 +10,7 @@ const {size, baseFireRate, baseBulletSpeed, baseBulletSize} = CONFIG.enemies
 const {Triangle: PTriangle} = Phaser.Geom
 
 const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
-  const geom = Triangle.equilateral(x, y, length)
+  const geom = Triangle.equilateral({x, y, length})
   let hp = hitPoints
   const draw = () => {
     WORLD.graphics.lineStyle(2, CONFIG.colors.white, 2)

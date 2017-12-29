@@ -50,7 +50,7 @@ const _enemy = ({x, y, length, hitPoints, color, fireRate, shootFunction}) => {
   // ^ think this would all be a good fit for something like MobX
 }
 
-const randomDirectionShooter = ({x, y}) => {
+const randomShooter = ({x, y}) => {
   const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
   return _enemy({
     x,
@@ -62,7 +62,7 @@ const randomDirectionShooter = ({x, y}) => {
     shootFunction: () => shootInDirection({x, y}, Vector.random(), baseBulletSize, baseBulletSpeed)
   })
 }
-const doubleRandomShooter = ({x, y}) => {
+const doubleShotRandom = ({x, y}) => {
   const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
   return _enemy({
     x,
@@ -94,7 +94,7 @@ const targetter = ({x, y}) => {
 
 export const Enemy = {
   of: _enemy,
-  PULSER: randomDirectionShooter,
-  DOUBLE_PULSER: doubleRandomShooter,
+  RANDOM_SHOT: randomShooter,
+  RANDOM_DOUBLE_SHOT: doubleShotRandom,
   TARGETTER: targetter
 }

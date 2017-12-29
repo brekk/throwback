@@ -4,12 +4,14 @@ import throttle from 'lodash/fp/throttle'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
 import {shootTowardsPlayer} from '../behaviors/shootTowardsPlayer'
+import {shootInDirection} from '../behaviors/shootInDirection'
+import {Vector} from '../util'
 import {Triangle} from './base'
 
-const {size, baseFireRate, baseBulletSpeed, baseBulletSize} = CONFIG.enemies
+const {size, baseFireRate} = CONFIG.enemies
 const {Triangle: PTriangle} = Phaser.Geom
 
-const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
+const _enemy = ({x, y, length, hitPoints, color, fireRate, shootFunction}) => {
   const geom = Triangle.equilateral({x, y, length})
   let hp = hitPoints
   const draw = () => {
@@ -20,7 +22,7 @@ const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
   const animateIdle = () => {
     PTriangle.Rotate(geom, 0.1)
   }
-  const throttledShot = throttle(fireRate, () => shootTowardsPlayer({x, y}, baseBulletSize, baseBulletSpeed))
+  const throttledShot = throttle(fireRate, shootFunction)
   const applyBehavior = () => {
     throttledShot()
   }
@@ -48,29 +50,33 @@ const _enemy = ({x, y, length, hitPoints, color, fireRate}) => {
   // ^ think this would all be a good fit for something like MobX
 }
 
-const easy = ({x, y}) => {
+const downShooter = ({x, y}) => {
+  const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
   return _enemy({
     x,
     y,
     length: size,
     hitPoints: 1,
     fireRate: baseFireRate,
-    color: CONFIG.colors.yellow
+    color: CONFIG.colors.yellow,
+    shootFunction: () => shootInDirection({x, y}, Vector.DOWN, baseBulletSize, baseBulletSpeed)
   })
 }
-const hard = ({x, y}) => {
+const targetter = ({x, y}) => {
+  const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
   return _enemy({
     x,
     y,
     length: size,
     hitPoints: 3, // More hit points
     fireRate: baseFireRate * 0.85, // Faster shooting speed
-    color: CONFIG.colors.red // different color
+    color: CONFIG.colors.red, // different color
+    shootFunction: () => shootTowardsPlayer({x, y}, baseBulletSize, baseBulletSpeed)
   })
 }
 
 export const Enemy = {
   of: _enemy,
-  EASY: easy,
-  HARD: hard
+  DOWN_SHOOTER: downShooter,
+  TARGETTER: targetter
 }

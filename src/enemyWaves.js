@@ -16,8 +16,8 @@ const getInboundsSpawnPosition = () => {
 export const wave = (n) => {
   const numHard = Math.floor(n / 3)
   const numEasy = n - numHard
-  const hardEnemies = times(() => Enemy.HARD(getInboundsSpawnPosition()), numHard)
-  const easyEnemies = times(() => Enemy.EASY(getInboundsSpawnPosition()), numEasy)
-  console.debug(`wave ${n} easy: ${easyEnemies.length}, hard: ${hardEnemies.length}`)
-  return [...easyEnemies, ...hardEnemies]
+  const targetters = times(() => Enemy.TARGETTER(getInboundsSpawnPosition()), numHard)
+  const downShooters = times(() => Enemy.DOWN_SHOOTER(getInboundsSpawnPosition()), numEasy)
+  console.debug(`wave ${n} easy: ${downShooters.length}, hard: ${targetters.length}`)
+  return [...downShooters, ...targetters]
 }

@@ -26,6 +26,7 @@ export const CONFIG = Object.freeze({
     yellow: 0xffff00,
     white: 0xffffff,
     red: 0xff0000,
+    green: 0x00ff00,
     black: 0x000000
   }
 })

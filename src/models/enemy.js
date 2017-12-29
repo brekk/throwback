@@ -62,6 +62,23 @@ const randomDirectionShooter = ({x, y}) => {
     shootFunction: () => shootInDirection({x, y}, Vector.random(), baseBulletSize, baseBulletSpeed)
   })
 }
+const doubleRandomShooter = ({x, y}) => {
+  const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
+  return _enemy({
+    x,
+    y,
+    length: size,
+    hitPoints: 1,
+    fireRate: baseFireRate,
+    color: CONFIG.colors.green,
+    shootFunction: () => {
+      const vector = Vector.random()
+      const reversed = {x: vector.y, y: vector.x}
+      shootInDirection({x, y}, vector, baseBulletSize, baseBulletSpeed)
+      shootInDirection({x, y}, reversed, baseBulletSize, baseBulletSpeed)
+    }
+  })
+}
 const targetter = ({x, y}) => {
   const {baseBulletSpeed, baseBulletSize} = CONFIG.enemies
   return _enemy({
@@ -78,5 +95,6 @@ const targetter = ({x, y}) => {
 export const Enemy = {
   of: _enemy,
   PULSER: randomDirectionShooter,
+  DOUBLE_PULSER: doubleRandomShooter,
   TARGETTER: targetter
 }

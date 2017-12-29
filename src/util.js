@@ -57,7 +57,11 @@ const vectorFromTo = (origin, target) => {
 export const Vector = {
   of: _vector,
   fromTo: vectorFromTo,
-  random: () => _vector(Math.random(), Math.random()),
+  random: () => {
+    const sign = Math.random() > 0.5 ? -1 : 1
+    const sign2 = Math.random() > 0.5 ? -1 : 1
+    return _vector(Math.random() * sign, Math.random() * sign2)
+  },
   UP: _vector(0, -1),
   DOWN: _vector(0, 1),
   LEFT: _vector(-1, 0),

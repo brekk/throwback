@@ -4,9 +4,16 @@ import {times} from 'ramda'
 import {GAME_CONFIG} from './config'
 import {Enemy} from './models/enemy'
 
+/**
+ * Get a pseudo-random spawn position according to these rules:
+ * * width * .8 + width * .1 -- don't spawn enemies too close to the edges
+ * * height / 2 -- only spawn on the top half of the screen
+ * @returns {object} x, y -- the x, y location to spawn in
+ */
 const getInboundsSpawnPosition = () => {
   const x = Math.random() * (GAME_CONFIG.width * 0.8) + GAME_CONFIG.width * 0.1
   const y = Math.random() * (GAME_CONFIG.height / 2)
+
   // TODO: very naive; should make sure it doesn't spawn under the player
   //       or on a bullet or on another enemy etc.
   //       or maybe better, we can have some predefined pools ala isaac

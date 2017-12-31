@@ -1,43 +1,42 @@
 import Phaser from 'phaser'
 import {CONFIG} from '../config'
 import {WORLD} from '../world'
-import {Bullet} from '../models'
-import {applyVector, ephemeraInBounds, throtLog} from '../util'
-import {fireUp, fireDown, fireLeft, fireRight} from '../ephemera/bullets'
+import {Explosion} from '../models/explosion'
+import {wave} from '../enemyWaves'
 import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
-// const {Geom} = Phaser
-// const {Circle} = Geom
+import {ephemeraInBounds, throtLog} from '../util'
+
+const {colors} = CONFIG
+const {red} = colors
 
 function handlePlayerInput() {
-  const {inputs} = WORLD
-  const {acceleration} = CONFIG
+  const {inputs, player} = WORLD
   const {left, right, up, down, w, a, s, d} = inputs
 
-  // We also tried player.physics.setVelocity(0, 0) here instead of friction
   if (left.isDown) {
-    WORLD.player.physics.setVelocityX(-acceleration) // See also .setAcceleration
+    player.commands.moveLeft()
   } else if (right.isDown) {
-    WORLD.player.physics.setVelocityX(acceleration)
+    player.commands.moveRight()
   }
-
-  // Not else if here so they can move left & up at the same time, etc.
+  
+  // If rather than else if here so they can move left & up at the same time, etc.
+  /* userConfig.invertXY <- here is where config can solve this crisis :) */
   if (up.isDown) {
-    WORLD.player.physics.setVelocityY(-acceleration)
-  // this seems existential
+    player.commands.moveUp()
   } else if (down.isDown) {
-    WORLD.player.physics.setVelocityY(acceleration)
+    player.commands.moveDown()
   }
 
   // Can only fire in one direction at a time.
   if (w.isDown) {
-    fireUp()
+    player.commands.shootUp()
   } else if (a.isDown) {
-    fireLeft()
+    player.commands.shootLeft()
   } else if (s.isDown) {
-    fireDown()
+    player.commands.shootDown()
   } else if (d.isDown) {
-    fireRight()
+    player.commands.shootRight()
   }
 }
 
@@ -62,50 +61,102 @@ function updatePowerUps() {
     WORLD.graphics.fillStyle(0xff0000, 1)
     WORLD.graphics.fillCircle(powerup.x, powerup.y, powerup._radius)
   }
+  // TODO: add powerup model; add draw logic to models.powerups.update
 }
 
 function updateBullets() {
-  const {ephemera = {}} = WORLD
-  const {colors} = CONFIG
-  const {yellow, white} = colors
-  const {powerups, bullets} = ephemera
-  
-  // TODO: scale on acceleration instead so we can tweak this globally
-  const {bullets: bulletConfig} = CONFIG
-  for (let i = 0; i < bullets.length; i++) {
-    updateEphemeraPre(i)
-    const bullet = bullets[i]
-    const {x: newX, y: newY} = applyVector(bullet, bullet.vector, bulletConfig.speed)
-    const movedBullet = updateEphemeraPost(Bullet.of({
-      x: newX,
-      y: newY,
-      radius: bullet.radius,
-      vector: bullet.vector
-    }))
-    WORLD.ephemera.bullets[i] = movedBullet
-    WORLD.graphics.lineStyle(2, yellow, 2)
-    WORLD.graphics.fillStyle(WORLD.wiggleShot ? white : yellow, 1)
-    WORLD.graphics.fillCircle(movedBullet.x, movedBullet.y, movedBullet.radius)
-
-    const hitPowerups = powerups.filter(
-      (x) => Phaser.Geom.Intersects.CircleToCircle(x, movedBullet._circle)
-    )
-    if (hitPowerups.length > 0) {
-      WORLD.ephemera.powerups = []
+  const bullets = WORLD.ephemera.bullets
+  bullets.forEach((b, i) => {
+    const isPlayerBullet = b.properties.owner() === `player`
+    if (isPlayerBullet) {
+      updateEphemeraPre(i)
     }
-  }
+    b.update()
+    if (isPlayerBullet) {
+      const newBullet = updateEphemeraPost(b)
+      bullets[i] = newBullet
+      // ^ TODO: this should all be moved into the bullet
+      //         so we don't have to overwrite the array spot
+    }
+    b.draw()
+  })
 
-  WORLD.ephemera.bullets = WORLD.ephemera.bullets.filter(ephemeraInBounds)
+  WORLD.ephemera.bullets = bullets.filter(ephemeraInBounds)
   // throtLog(`%c$$$$`, `background-color: red;`, WORLD.ephemeraBullets.length)
   // WORLD.ephemeraBullets = filtered
 }
 
+function handleCollisions() {
+  const {ephemera = {}, player} = WORLD
+  const {powerups, bullets, enemies} = ephemera
+  const colliders = Phaser.Geom.Intersects
+
+  bullets.forEach((b) => {
+    const isPlayerBullet = b.properties.owner() === `player`
+    const {x, y} = b.properties.position()
+
+    if (isPlayerBullet) {
+      const hitPowerups = powerups.filter((p) => colliders.CircleToCircle(p, b._engine._circle()))
+      const hitEnemies = enemies.filter((e) => colliders.TriangleToCircle(e._triangle, b._engine._circle()))
+      if (hitPowerups.length > 0) {
+        WORLD.ephemera.powerups = []
+        b.hitSomething = true
+      }
+      if (hitEnemies.length > 0) {
+        hitEnemies.forEach((e) => {
+          e.events.onHit(b)
+          WORLD.score++
+        })
+        WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10}))
+        b.hitSomething = true
+      }
+    }
+    if (!isPlayerBullet) {
+      const hitPlayer = colliders.TriangleToCircle(player._engine._triangle(), b._engine._circle())
+      if (hitPlayer) {
+        player.events.onHit(b)
+        WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10, color: red}))
+        b.hitSomething = true
+      }
+    }
+  })
+
+  WORLD.ephemera.bullets = bullets.filter((b) => !b.hitSomething)
+}
+
+function updateEnemies() {
+  if (WORLD.ephemera.enemies.length === 0) {
+    WORLD.ephemera.wave++
+    const _wave = wave(WORLD.ephemera.wave)
+    WORLD.ephemera.enemies.push(..._wave)
+    console.debug(`wave: ${WORLD.ephemera.wave}, numEnemies: ${WORLD.ephemera.enemies.length}`)
+  }
+  WORLD.ephemera.enemies = WORLD.ephemera.enemies.filter((e) => e.properties.hp() > 0)
+  WORLD.ephemera.enemies.forEach((e) => e.events.update())
+}
+
+function updateEffects() {
+  WORLD.ephemera.effects = WORLD.ephemera.effects.filter((e) => !e.properties.isDone())
+  WORLD.ephemera.effects.forEach((e) => e.events.update())
+}
+
 export function update() {
+  const player = WORLD.player
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))
-  // console.log(`this`, this)
-  updatePowerUps() // update.powerups.js?
-  updateBullets() // update.bullets.js?
-  handlePlayerInput() // update.player.js?
+  // console.debug(`this`, this)
+  updateEnemies()
+  updateBullets()
+  updateEffects()
+  player.update()
+  if (!player.properties.isDead()) {
+    updatePowerUps()
+    handleCollisions()
+    // handleSpawns()
+    //   ie: powerups, new enemy wave, etc.; could think of these as 'handle timers/triggers'
+    //   * when(Every.time.seconds(15), spawnPowerup)
+    //   * when(WORLD.ephemera.enemies.length === 0, spawnEnemyWave)
+    handlePlayerInput()
+  }
   // updatePost(WORLD)
 }

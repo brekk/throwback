@@ -10,14 +10,24 @@ export const CONFIG = Object.freeze({
       lifetime: 400
     }
   },
-  bullets: {
-    // speed: 7,
-    speed: 10,
-    fireRate: 150
+  player: {
+    baseFireRate: 150,
+    baseHp: 3,
+    baseBulletSpeed: 10,
+    baseBulletSize: 5
+  },
+  enemies: {
+    size: 25,
+    baseFireRate: 1000,
+    baseBulletSpeed: 3,
+    baseBulletSize: 5
   },
   colors: {
     yellow: 0xffff00,
-    white: 0xffffff
+    white: 0xffffff,
+    red: 0xff0000,
+    green: 0x00ff00,
+    black: 0x000000
   }
 })
 

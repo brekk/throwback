@@ -3,7 +3,7 @@ import {create as inner} from './create'
 import {updatePre as updateStatsPre} from './update'
 
 const showStats = process.env.showStats
-// console.log(`show stats?`, showStats)
+// console.debug(`show stats?`, showStats)
 
 export const FEATURE = {
   showStats: showStats

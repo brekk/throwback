@@ -1,11 +1,12 @@
 export const WORLD = {
   graphics: null,
-  player: {
-    image: null,
-    physics: null
-  },
+  player: null,
+  score: 0,
   ephemera: {
-    bullets: []
+    bullets: [],
+    enemies: [],
+    effects: [],
+    wave: 0
   },
   inputs: {
     up: null,

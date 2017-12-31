@@ -22,21 +22,50 @@ export const randomize = curry(
     (x) => (Math.random() * x * amount),
     input
   )
+  // ^ We should strongly considered switching to 'seeded' randomness
+  //   this would allow us to reproduce exact runs in test
+  //   this approach seems great to me:
+  //   https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript/23304189#23304189
 )
 
-export const ephemeraInBounds = (b) => (
-  b.y < GAME_CONFIG.height &&
-  b.y > 0 &&
-  b.x < GAME_CONFIG.width &&
-  b.x > 0
-)
+export const ephemeraInBounds = (b) => {
+  const {x, y} = b.properties.position()
+  return y < GAME_CONFIG.height &&
+  y > 0 &&
+  x < GAME_CONFIG.width &&
+  x > 0
+}
+
+const _vector = (x = 0, y = 0) => ({ x, y })
+
+/**
+ * Returns a _normalized_ vector from the origin to the target.
+ * 'Normalized' will scale the vector such that it will have a magnitude of 1
+ * @param {object} origin an object with x, y)
+ * @param {object} target an object with x, y)
+ * @returns {vector} a normalized vector from origin to target
+ */
+const vectorFromTo = (origin, target) => {
+  const {x: x1, y: y1} = origin
+  const {x: x2, y: y2} = target
+  const newX = x2 - x1
+  const newY = y2 - y1
+  const magnitude = Math.sqrt((newX ** 2) + (newY ** 2))
+  return {x: newX / magnitude, y: newY / magnitude}
+}
 
 export const Vector = {
-  of: (x = 0, y = 0) => ({ x, y }),
-  UP: {x: 0, y: -1},
-  DOWN: {x: 0, y: 1},
-  LEFT: {x: -1, y: 0},
-  RIGHT: {x: 1, y: 0}
+  of: _vector,
+  fromTo: vectorFromTo,
+  random: () => {
+    const sign = Math.random() > 0.5 ? -1 : 1
+    const sign2 = Math.random() > 0.5 ? -1 : 1
+    return _vector(Math.random() * sign, Math.random() * sign2)
+  },
+  UP: _vector(0, -1),
+  DOWN: _vector(0, 1),
+  LEFT: _vector(-1, 0),
+  RIGHT: _vector(1, 0)
 }
 
 export const applyVector = (target, vector, speed) => {

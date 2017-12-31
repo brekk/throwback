@@ -2919,9 +2919,9 @@ performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
 
-phaser@^3.0.0-beta.5:
-  version "3.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.0.0-beta.9.tgz#6cf78e2aedd0c06cf2999352473fbb6adda8ecff"
+phaser@^3.0.0-beta.14:
+  version "3.0.0-beta.14"
+  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.0.0-beta.14.tgz#d6a7542f7874856c67c08a3cb10a7fa3389586f9"
 
 pify@^2.0.0:
   version "2.3.0"

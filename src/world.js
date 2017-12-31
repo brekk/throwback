@@ -1,5 +1,10 @@
 export const WORLD = {
   graphics: null,
+  ui: {
+    scoreText: null,
+    gameOverText: null,
+    hpBar: null
+  },
   player: null,
   score: 0,
   ephemera: {

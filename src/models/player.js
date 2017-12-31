@@ -3,6 +3,7 @@ import throttle from 'lodash/fp/throttle'
 import {GAME_CONFIG, CONFIG} from '../config'
 import {SPRITES} from '../sprites'
 import {WORLD} from '../world'
+import {showGameOver} from '../ui'
 import {Vector} from '../util'
 import {Explosion} from './explosion'
 import {Bullet} from './bullet'
@@ -108,6 +109,7 @@ const init = (ctx) => {
           const {x, y} = position()
           const baseSize = 6
           const red = CONFIG.colors.red
+          showGameOver()
           WORLD.ephemera.effects.push(Explosion.at({x, y, size: baseSize * 10, color: red}))
           WORLD.ephemera.effects.push(Explosion.at({x: x + 5, y, size: baseSize * 11, color: red}))
           WORLD.ephemera.effects.push(Explosion.at({x: x + 5, y: y - 5, size: baseSize * 8, color: red}))

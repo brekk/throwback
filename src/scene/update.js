@@ -5,6 +5,7 @@ import {Explosion} from '../models/explosion'
 import {wave} from '../enemyWaves'
 import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
+import {updateScoreText} from '../ui'
 import {ephemeraInBounds, throtLog} from '../util'
 
 const {colors} = CONFIG
@@ -106,6 +107,7 @@ function handleCollisions() {
         hitEnemies.forEach((e) => {
           e.events.onHit(b)
           WORLD.score++
+          updateScoreText()
         })
         WORLD.ephemera.effects.push(Explosion.at({x, y, size: b.properties.radius() * 10}))
         b.hitSomething = true
@@ -127,6 +129,7 @@ function handleCollisions() {
 function updateEnemies() {
   if (WORLD.ephemera.enemies.length === 0) {
     WORLD.ephemera.wave++
+    updateScoreText()
     const _wave = wave(WORLD.ephemera.wave)
     WORLD.ephemera.enemies.push(..._wave)
     console.debug(`wave: ${WORLD.ephemera.wave}, numEnemies: ${WORLD.ephemera.enemies.length}`)

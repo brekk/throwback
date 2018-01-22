@@ -25,8 +25,9 @@ const {red} = colors
 function handlePlayerInput() {
   const {inputs, player} = WORLD
   const {left, right, up, down, w, a, s, d, esc} = inputs
-  if (esc.timeDown > 100) {
-    WORLD.paused = !WORLD.paused
+  if (esc.isDown) {
+    throtLog(`STOP! 🔨 ⏰`)
+    WORLD.paused = true
   }
 
   if (left.isDown) {
@@ -160,7 +161,7 @@ export function update() {
     const {inputs} = WORLD
     const {esc} = inputs
     if (esc.isDown) {
-      WORLD.paused = !WORLD.paused
+      WORLD.paused = false
     }
     return
   }

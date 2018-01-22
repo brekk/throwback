@@ -7,19 +7,34 @@ import {addPlusOne} from '../ephemera/powerups'
 import {updateEphemeraPost, updateEphemeraPre, updatePre} from '../features'
 import {ephemeraInBounds, throtLog} from '../util'
 
+const once = (fn) => {
+  let sure = false
+  return function inner() {
+    if (!sure) {
+      sure = true
+      return fn.apply(null, Array.from(arguments))
+    }
+  }
+}
+const oneLog = once(console.log.bind(console))
+const when = (condition, fn) => condition() && fn()
+
 const {colors} = CONFIG
 const {red} = colors
 
 function handlePlayerInput() {
   const {inputs, player} = WORLD
-  const {left, right, up, down, w, a, s, d} = inputs
+  const {left, right, up, down, w, a, s, d, esc} = inputs
+  if (esc.timeDown > 100) {
+    WORLD.paused = !WORLD.paused
+  }
 
   if (left.isDown) {
     player.commands.moveLeft()
   } else if (right.isDown) {
     player.commands.moveRight()
   }
-  
+
   // If rather than else if here so they can move left & up at the same time, etc.
   /* userConfig.invertXY <- here is where config can solve this crisis :) */
   if (up.isDown) {
@@ -43,7 +58,7 @@ function handlePlayerInput() {
 function updatePowerUps() {
   const {ephemera = {}} = WORLD
   const {powerups} = ephemera
-  
+
   if (!WORLD.powerupIntervalForPlusOne && WORLD.ephemera.powerups.length === 0) {
     // if (alt.isDown) {
     const addOne = addPlusOne()
@@ -141,6 +156,14 @@ function updateEffects() {
 }
 
 export function update() {
+  if (WORLD.paused) {
+    const {inputs} = WORLD
+    const {esc} = inputs
+    if (esc.isDown) {
+      WORLD.paused = !WORLD.paused
+    }
+    return
+  }
   const player = WORLD.player
   WORLD.graphics.clear()
   // updatePre(this.add.text.bind(this))

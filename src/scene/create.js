@@ -15,7 +15,8 @@ export function create() {
     w: KEYS.W,
     a: KEYS.A,
     s: KEYS.S,
-    d: KEYS.D
+    d: KEYS.D,
+    esc: KEYS.ESC
   })
   WORLD.graphics = this.add.graphics()
   WORLD.ephemera.bullets = []

@@ -1,4 +1,5 @@
 export const WORLD = {
+  paused: false,
   graphics: null,
   player: null,
   score: 0,
@@ -17,6 +18,7 @@ export const WORLD = {
     w: null,
     a: null,
     s: null,
-    d: null
+    d: null,
+    esc: null
   }
 }
